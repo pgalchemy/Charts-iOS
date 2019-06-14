@@ -422,15 +422,29 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                 // Set the color for the currently drawn value. If the index is out of bounds, reuse colors.
                 context.setFillColor(dataSet.color(atIndex: j).cgColor)
             }
-            
-            context.fill(barRect)
-            
-            if drawBorder
-            {
-                context.setStrokeColor(borderColor.cgColor)
-                context.setLineWidth(borderWidth)
-                context.stroke(barRect)
+
+            // START CUSTOM CORNER RADIUS CODE
+            let cornerRadius = CGSize(width: barRect.width / 2, height: barRect.width / 2)
+            let bezierPath = UIBezierPath(roundedRect: barRect, byRoundingCorners: [.topLeft, .topRight], cornerRadii: cornerRadius)
+            context.addPath(bezierPath.cgPath)
+            context.fillPath()
+
+            if drawBorder {
+                bezierPath.lineWidth = borderWidth
+                borderColor.setStroke()
+                bezierPath.stroke()
             }
+
+            // END CUSTOM CODE
+
+//            context.fill(barRect)
+//            
+//            if drawBorder
+//            {
+//                context.setStrokeColor(borderColor.cgColor)
+//                context.setLineWidth(borderWidth)
+//                context.stroke(barRect)
+//            }
 
             // Create and append the corresponding accessibility element to accessibilityOrderedElements
             if let chart = dataProvider as? BarChartView
@@ -802,8 +816,16 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                 prepareBarHighlight(x: e.x, y1: y1, y2: y2, barWidthHalf: barData.barWidth / 2.0, trans: trans, rect: &barRect)
                 
                 setHighlightDrawPos(highlight: high, barRect: barRect)
-                
-                context.fill(barRect)
+
+                // START CUSTOM CODE
+                let cornerRadius = CGSize(width: barRect.width / 2.0, height: barRect.width / 2.0)
+                let bezierPath = UIBezierPath(roundedRect: barRect, byRoundingCorners: [.topLeft, .topRight], cornerRadii: cornerRadius)
+                context.addPath(bezierPath.cgPath)
+                context.fillPath()
+
+                // END CUSTOM CODE
+
+//                context.fill(barRect)
             }
         }
         
