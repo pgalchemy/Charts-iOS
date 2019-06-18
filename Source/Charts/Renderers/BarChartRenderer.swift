@@ -425,7 +425,7 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
 
             // START CUSTOM CORNER RADIUS CODE
             let cornerRadius = CGSize(width: barRect.width / 2, height: barRect.width / 2)
-            let bezierPath = UIBezierPath(roundedRect: barRect, byRoundingCorners: [.topLeft, .topRight], cornerRadii: cornerRadius)
+            let bezierPath = UIBezierPath(roundedRect: barRect, byRoundingCorners: .allCorners, cornerRadii: cornerRadius)
             context.addPath(bezierPath.cgPath)
             context.fillPath()
 
@@ -819,7 +819,7 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
 
                 // START CUSTOM CODE
                 let cornerRadius = CGSize(width: barRect.width / 2.0, height: barRect.width / 2.0)
-                let bezierPath = UIBezierPath(roundedRect: barRect, byRoundingCorners: [.topLeft, .topRight], cornerRadii: cornerRadius)
+                let bezierPath = UIBezierPath(roundedRect: barRect, byRoundingCorners: .allCorners, cornerRadii: cornerRadius)
                 context.addPath(bezierPath.cgPath)
                 context.fillPath()
 
