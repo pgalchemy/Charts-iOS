@@ -235,7 +235,10 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         context.restoreGState()
         
         renderer.drawExtras(context: context)
-        
+
+        // Render the average line first
+        rightYAxisRenderer.renderAxisLabels(context: context)
+
         if _xAxis.isEnabled && !_xAxis.isDrawLimitLinesBehindDataEnabled
         {
             xAxisRenderer.renderLimitLines(context: context)
@@ -250,10 +253,9 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         {
             rightYAxisRenderer.renderLimitLines(context: context)
         }
-        
+
         xAxisRenderer.renderAxisLabels(context: context)
         leftYAxisRenderer.renderAxisLabels(context: context)
-        rightYAxisRenderer.renderAxisLabels(context: context)
 
         if clipValuesToContentEnabled
         {

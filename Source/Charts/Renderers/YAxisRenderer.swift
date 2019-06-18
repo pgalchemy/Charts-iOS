@@ -301,19 +301,21 @@ open class YAxisRenderer: AxisRendererBase
             
             context.saveGState()
             defer { context.restoreGState() }
-            
-            var clippingRect = viewPortHandler.contentRect
-            clippingRect.origin.y -= l.lineWidth / 2.0
-            clippingRect.size.height += l.lineWidth
-            context.clip(to: clippingRect)
-            
+
+            // Don't clip the limit line            
+            // var clippingRect = viewPortHandler.contentRect
+            // clippingRect.origin.y -= l.lineWidth / 2.0
+            // clippingRect.size.height += l.lineWidth
+            // context.clip(to: clippingRect)
+
             position.x = 0.0
             position.y = CGFloat(l.limit)
             position = position.applying(trans)
             
             context.beginPath()
-            context.move(to: CGPoint(x: viewPortHandler.contentLeft, y: position.y))
-            context.addLine(to: CGPoint(x: viewPortHandler.contentRight, y: position.y))
+            // Draw line all the way across padding areas
+            context.move(to: CGPoint(x: 0.0, y: position.y))
+            context.addLine(to: CGPoint(x: viewPortHandler.contentRight + viewPortHandler.offsetRight, y: position.y))
             
             context.setStrokeColor(l.lineColor.cgColor)
             context.setLineWidth(l.lineWidth)
@@ -325,9 +327,9 @@ open class YAxisRenderer: AxisRendererBase
             {
                 context.setLineDash(phase: 0.0, lengths: [])
             }
-            
+
             context.strokePath()
-            
+
             let label = l.label
             
             // if drawing the limit-value label is enabled
@@ -345,8 +347,8 @@ open class YAxisRenderer: AxisRendererBase
                         point: CGPoint(
                             x: viewPortHandler.contentRight - xOffset,
                             y: position.y - yOffset),
-                        align: .right,
-                        attributes: [NSAttributedString.Key.font: l.valueFont, NSAttributedString.Key.foregroundColor: l.valueTextColor])
+                        align: .left,
+                        attributes: [NSAttributedString.Key.font: l.valueFont, NSAttributedString.Key.foregroundColor: l.valueTextColor,  NSAttributedString.Key.backgroundColor: UIColor.white])
                 }
                 else if l.labelPosition == .bottomRight
                 {
