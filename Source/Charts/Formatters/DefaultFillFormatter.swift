@@ -12,8 +12,8 @@
 import Foundation
 import CoreGraphics
 
-#if !os(OSX)
-    import UIKit
+#if canImport(UIKit)
+import UIKit
 #endif
 
 /// Default formatter that calculates the position of the filled line.

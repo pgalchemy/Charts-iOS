@@ -12,8 +12,8 @@
 import Foundation
 import CoreGraphics
 
-#if !os(OSX)
-    import UIKit
+#if canImport(UIKit)
+import UIKit
 #endif
 
 /// BarChart with horizontal bar orientation. In this implementation, x- and y-axis are switched.

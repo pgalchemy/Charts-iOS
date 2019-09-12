@@ -8,6 +8,7 @@
 //  https://github.com/danielgindi/Charts
 //
 
+import CoreGraphics
 import Foundation
 
 extension CGPoint {

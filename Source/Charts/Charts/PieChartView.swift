@@ -12,8 +12,8 @@
 import Foundation
 import CoreGraphics
 
-#if !os(OSX)
-    import UIKit
+#if canImport(UIKit)
+import UIKit
 #endif
 
 /// View that represents a pie chart. Draws cake like slices.
