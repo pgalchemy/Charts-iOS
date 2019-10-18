@@ -12,6 +12,14 @@
 import Foundation
 import CoreGraphics
 
+#if canImport(UIKit)
+    import UIKit
+#endif
+
+#if canImport(Cocoa)
+import Cocoa
+#endif
+
 open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
 {
     /// A nested array of elements ordered logically (i.e not in visual/drawing order) for use with VoiceOver
@@ -424,27 +432,29 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
             }
 
             // START CUSTOM CORNER RADIUS CODE
-            let cornerRadius = CGSize(width: barRect.width / 2, height: barRect.width / 2)
-            let bezierPath = UIBezierPath(roundedRect: barRect, byRoundingCorners: .allCorners, cornerRadii: cornerRadius)
-            context.addPath(bezierPath.cgPath)
-            context.fillPath()
+            if dataProvider.isDrawRoundedBarsEnabled {
+                let cornerRadius = CGSize(width: barRect.width / 2, height: barRect.width / 2)
+                let bezierPath = UIBezierPath(roundedRect: barRect, byRoundingCorners: .allCorners, cornerRadii: cornerRadius)
+                context.addPath(bezierPath.cgPath)
+                context.fillPath()
 
-            if drawBorder {
-                bezierPath.lineWidth = borderWidth
-                borderColor.setStroke()
-                bezierPath.stroke()
+                if drawBorder {
+                    bezierPath.lineWidth = borderWidth
+                    borderColor.setStroke()
+                    bezierPath.stroke()
+                }
+            } else {
+                context.fill(barRect)
+
+                if drawBorder
+                {
+                    context.setStrokeColor(borderColor.cgColor)
+                    context.setLineWidth(borderWidth)
+                    context.stroke(barRect)
+                }
             }
-
             // END CUSTOM CODE
 
-//            context.fill(barRect)
-//            
-//            if drawBorder
-//            {
-//                context.setStrokeColor(borderColor.cgColor)
-//                context.setLineWidth(borderWidth)
-//                context.stroke(barRect)
-//            }
 
             // Create and append the corresponding accessibility element to accessibilityOrderedElements
             if let chart = dataProvider as? BarChartView
@@ -496,7 +506,7 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                 let barData = dataProvider.barData
                 else { return }
 
-            var dataSets = barData.dataSets
+            let dataSets = barData.dataSets
 
             let valueOffsetPlus: CGFloat = 4.5
             var posOffset: CGFloat
@@ -818,14 +828,16 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                 setHighlightDrawPos(highlight: high, barRect: barRect)
 
                 // START CUSTOM CODE
-                let cornerRadius = CGSize(width: barRect.width / 2.0, height: barRect.width / 2.0)
-                let bezierPath = UIBezierPath(roundedRect: barRect, byRoundingCorners: .allCorners, cornerRadii: cornerRadius)
-                context.addPath(bezierPath.cgPath)
-                context.fillPath()
-
+                if dataProvider.isDrawRoundedBarsEnabled {
+                    let cornerRadius = CGSize(width: barRect.width / 2.0, height: barRect.width / 2.0)
+                    let bezierPath = UIBezierPath(roundedRect: barRect, byRoundingCorners: .allCorners, cornerRadii: cornerRadius)
+                    context.addPath(bezierPath.cgPath)
+                    context.fillPath()
+                } else {
+                    context.fill(barRect)
+                }
                 // END CUSTOM CODE
 
-//                context.fill(barRect)
             }
         }
         
@@ -889,9 +901,12 @@ open class BarChartRenderer: BarLineScatterCandleBubbleRenderer
             } else {
                 stackLabel = nil
             }
-
+            
+            //Handles empty array of yValues
+            let yValue = vals.isEmpty ? 0.0 : vals[idx % vals.count]
+            
             elementValueText = dataSet.valueFormatter?.stringForValue(
-                vals[idx % stackSize],
+                yValue,
                 entry: e,
                 dataSetIndex: dataSetIndex,
                 viewPortHandler: viewPortHandler) ?? "\(e.y)"
