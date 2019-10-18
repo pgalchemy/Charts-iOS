@@ -44,6 +44,7 @@ class BarChartViewController: DemoBaseViewController {
         
         chartView.drawBarShadowEnabled = false
         chartView.drawValueAboveBarEnabled = false
+        chartView.drawRoundedBarsEnabled = false
         
         chartView.maxVisibleCount = 60
         

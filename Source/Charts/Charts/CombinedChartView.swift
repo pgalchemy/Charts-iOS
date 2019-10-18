@@ -175,13 +175,23 @@ open class CombinedChartView: BarLineChartViewBase, CombinedChartDataProvider
         get { return (renderer as! CombinedChartRenderer).drawBarShadowEnabled }
         set { (renderer as! CombinedChartRenderer).drawBarShadowEnabled = newValue }
     }
+
+    /// if set to true, bars will be drawn with rounded corners
+    @objc open var drawRoundedBarsEnabled: Bool
+    {
+        get { return (renderer as! CombinedChartRenderer).drawRoundedBarsEnabled }
+        set { (renderer as! CombinedChartRenderer).drawRoundedBarsEnabled = newValue }
+    }
     
     /// `true` if drawing values above bars is enabled, `false` ifnot
     open var isDrawValueAboveBarEnabled: Bool { return (renderer as! CombinedChartRenderer).drawValueAboveBarEnabled }
     
     /// `true` if drawing shadows (maxvalue) for each bar is enabled, `false` ifnot
     open var isDrawBarShadowEnabled: Bool { return (renderer as! CombinedChartRenderer).drawBarShadowEnabled }
-    
+
+    /// `true` if bars will have rounded corners, `false` if not
+    open var isDrawRoundedBarsEnabled: Bool { return (renderer as! CombinedChartRenderer).drawRoundedBarsEnabled }
+
     /// the order in which the provided data objects should be drawn.
     /// The earlier you place them in the provided array, the further they will be in the background. 
     /// e.g. if you provide [DrawOrder.Bar, DrawOrder.Line], the bars will be drawn behind the lines.
